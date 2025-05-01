@@ -17,6 +17,12 @@
     }
   ],
   "framework": "angular",
-  "buildCommand": "npm run build -- --configuration=production --output-path=dist",
-  "outputDirectory": "dist"
+  "buildCommand": "npm run build -- --configuration=production",
+  "outputDirectory": "dist/furia-day",
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 } 
