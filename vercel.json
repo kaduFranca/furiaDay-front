@@ -1,7 +1,8 @@
 {
   "build": {
     "env": {
-      "NODE_ENV": "production"
+      "NODE_ENV": "production",
+      "VERCEL_BUILD_BUDGET": "10"
     }
   },
   "headers": [
@@ -14,5 +15,8 @@
         }
       ]
     }
-  ]
+  ],
+  "framework": "angular",
+  "buildCommand": "npm run build -- --prod --output-path=dist",
+  "outputDirectory": "dist"
 } 
