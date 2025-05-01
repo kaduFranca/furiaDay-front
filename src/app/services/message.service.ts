@@ -3,16 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Message {
-  id?: string;
+  id?: number;
+  created_at?: string;
   content: string;
-  timestamp?: Date;
+  isBot: boolean;
+  timestamp: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessageService {
-  private apiUrl = 'https://furia-day-api.vercel.app/messages/';
+  private apiUrl = '/api/messages/';
 
   constructor(private http: HttpClient) { }
 
@@ -22,5 +24,9 @@ export class MessageService {
 
   getMessageHistory(): Observable<Message[]> {
     return this.http.get<Message[]>(this.apiUrl);
+  }
+
+  getNewMessages(lastTimestamp: string): Observable<Message[]> {
+    return this.http.get<Message[]>(`${this.apiUrl}?since=${lastTimestamp}`);
   }
 } 

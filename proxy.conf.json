@@ -1,0 +1,23 @@
+{
+  "/messages": {
+    "target": "https://furia-day-api.vercel.app",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/messages": "/messages"
+    }
+  },
+  "/api": {
+    "target": "https://furia-day-api.vercel.app",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
+    }
+  }
+} 

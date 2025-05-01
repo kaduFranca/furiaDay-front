@@ -17,3 +17,10 @@ body {
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
 }
+
+/* Estilo específico para o componente de chat */
+app-chat {
+  width: 100%;
+  max-width: 600px;
+  min-width: 600px;
+}
