@@ -17,6 +17,6 @@
     }
   ],
   "framework": "angular",
-  "buildCommand": "npm run build -- --prod --output-path=dist",
+  "buildCommand": "npm run build -- --configuration=production --output-path=dist",
   "outputDirectory": "dist"
 } 
