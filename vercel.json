@@ -1,24 +1,14 @@
 {
-  "build": {
-    "env": {
-      "NODE_ENV": "production",
-      "VERCEL_BUILD_BUDGET": "10"
-    }
-  },
-  "headers": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/furia-day"
+      }
     }
   ],
-  "framework": "angular",
-  "buildCommand": "npm run build -- --configuration=production",
-  "outputDirectory": "dist/furia-day",
   "routes": [
     {
       "src": "/(.*)",
