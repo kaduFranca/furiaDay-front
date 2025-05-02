@@ -10,6 +10,11 @@ export interface Message {
   timestamp: string;
 }
 
+export interface MessagePair {
+  userMessage: Message;
+  botMessage: Message;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,11 +27,11 @@ export class MessageService {
     return this.http.post<Message>(this.apiUrl, message);
   }
 
-  getMessageHistory(): Observable<Message[]> {
-    return this.http.get<Message[]>(this.apiUrl);
+  getMessageHistory(): Observable<MessagePair[]> {
+    return this.http.get<MessagePair[]>(this.apiUrl);
   }
 
-  getNewMessages(lastTimestamp: string): Observable<Message[]> {
-    return this.http.get<Message[]>(`${this.apiUrl}?since=${lastTimestamp}`);
+  getNewMessages(lastTimestamp: string): Observable<MessagePair[]> {
+    return this.http.get<MessagePair[]>(`${this.apiUrl}?since=${lastTimestamp}`);
   }
 } 

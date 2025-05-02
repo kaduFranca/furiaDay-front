@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MessageService, Message as ApiMessage } from '../../services/message.service';
+import { MessageService, Message as ApiMessage, MessagePair } from '../../services/message.service';
 import { TimeFormatPipe } from '../../pipes/time-format.pipe';
 import { interval, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -11,6 +11,7 @@ interface ChatMessage {
   isBot: boolean;
   timestamp: string;
   id?: number;
+  isError?: boolean;
 }
 
 @Component({
@@ -67,8 +68,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       .subscribe({
         next: (allMessages) => {
           if (allMessages && allMessages.length > 0) {
+            // Transforma os pares em um array único e ordena por timestamp
+            const flatMessages = allMessages.flatMap(pair => [pair.userMessage, pair.botMessage])
+              .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+            
             // Encontra a última mensagem do bot
-            const botMessages = allMessages.filter(msg => msg.isBot);
+            const botMessages = flatMessages.filter(msg => msg.isBot);
             const lastBotMessage = botMessages[botMessages.length - 1];
             
             // Se encontrou uma mensagem do bot e é diferente da última que já temos
@@ -88,7 +93,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
                   id: lastBotMessage.id
                 };
                 
-                this.messages = [...this.messages, newChatMessage];
+                // Atualiza todas as mensagens mantendo a ordem correta
+                this.messages = flatMessages.map(msg => ({
+                  text: msg.content,
+                  isBot: msg.isBot,
+                  timestamp: msg.timestamp,
+                  id: msg.id
+                }));
                 this.shouldScroll = true;
               }
             }
@@ -110,7 +121,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.messageService.getMessageHistory().subscribe({
       next: (apiMessages) => {
         if (apiMessages && apiMessages.length > 0) {
-          this.messages = apiMessages.map(msg => ({
+          // Transforma os pares de mensagens em um array único e ordena por timestamp
+          const allMessages = apiMessages.flatMap(pair => [pair.userMessage, pair.botMessage])
+            .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
+          this.messages = allMessages.map(msg => ({
             text: msg.content,
             isBot: msg.isBot,
             timestamp: msg.timestamp,
@@ -118,7 +133,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
           }));
           
           // Encontra a última mensagem do bot e salva seu ID
-          const botMessages = apiMessages.filter(msg => msg.isBot);
+          const botMessages = allMessages.filter(msg => msg.isBot);
           if (botMessages.length > 0) {
             this.lastBotMessageId = botMessages[botMessages.length - 1].id;
           }
@@ -157,16 +172,17 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     const apiMessage: ApiMessage = {
       content: userMessage.text,
       isBot: false,
-      timestamp: userMessage.timestamp
+      timestamp: ''
     };
 
     this.messageService.sendMessage(apiMessage).subscribe({
       error: (error) => {
         console.error('Erro ao enviar mensagem:', error);
         const errorMessage: ChatMessage = {
-          text: 'Desculpe, ocorreu um erro ao processar sua mensagem. Por favor, tente novamente.',
+          text: 'Sem conexão com o servidor',
           isBot: true,
-          timestamp: this.getCurrentTime()
+          timestamp: this.getCurrentTime(),
+          isError: true
         };
         this.messages.push(errorMessage);
         this.shouldScroll = true;

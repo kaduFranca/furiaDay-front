@@ -21,7 +21,7 @@
           <ng-container *ngFor="let message of messages">
             <div [class]="message.isBot ? 'max-w-[60%] justify-start animate-slide-left' : 'max-w-[60%] ml-auto justify-end animate-slide-right'">
               <div [class]="message.isBot ? 
-                'bg-gray-800 rounded-tl-lg rounded-tr-lg rounded-br-lg p-3' : 
+                'bg-gray-800 rounded-tl-lg rounded-tr-lg rounded-br-lg p-3' + (message.isError ? ' message-error' : '') : 
                 'bg-blue-600 rounded-tr-lg rounded-tl-lg rounded-bl-lg p-3'">
                 <p class="text-white">{{ message.text }}</p>
               </div>
