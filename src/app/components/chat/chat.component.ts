@@ -12,6 +12,7 @@ interface ChatMessage {
   timestamp: string;
   id?: number;
   isError?: boolean;
+  options?: string[];
 }
 
 @Component({
@@ -85,20 +86,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
               const messageExists = this.messages.some(msg => msg.id === lastBotMessage.id);
               
               if (!messageExists) {
-                // Adiciona a nova mensagem do bot ao chat
-                const newChatMessage: ChatMessage = {
-                  text: lastBotMessage.content,
-                  isBot: lastBotMessage.isBot,
-                  timestamp: lastBotMessage.timestamp,
-                  id: lastBotMessage.id
-                };
-                
                 // Atualiza todas as mensagens mantendo a ordem correta
                 this.messages = flatMessages.map(msg => ({
                   text: msg.content,
                   isBot: msg.isBot,
                   timestamp: msg.timestamp,
-                  id: msg.id
+                  id: msg.id,
+                  options: msg.options
                 }));
                 this.shouldScroll = true;
               }
@@ -129,7 +123,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
             text: msg.content,
             isBot: msg.isBot,
             timestamp: msg.timestamp,
-            id: msg.id
+            id: msg.id,
+            options: msg.options
           }));
           
           // Encontra a última mensagem do bot e salva seu ID
@@ -138,6 +133,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
             this.lastBotMessageId = botMessages[botMessages.length - 1].id;
           }
           this.shouldScroll = true;
+        } else {
+          // Se não houver mensagens, envia automaticamente a mensagem "opções"
+          this.sendOptionsMessage();
         }
       },
       error: (error) => {
@@ -145,9 +143,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.messages = [{
           text: 'Estou aqui para conversar sobre games e eSports! O que você quer saber hoje?',
           isBot: true,
-          timestamp: this.getCurrentTime()
+          timestamp: this.getCurrentTime(),
+          options: ['hoje', 'jogo', 'time', 'equipe', 'jogador', 'partida']
         }];
         this.shouldScroll = true;
+        // Envia a mensagem "opções" em caso de erro também
+        this.sendOptionsMessage();
       }
     });
   }
@@ -171,6 +172,68 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     const apiMessage: ApiMessage = {
       content: userMessage.text,
+      isBot: false,
+      timestamp: ''
+    };
+
+    this.messageService.sendMessage(apiMessage).subscribe({
+      error: (error) => {
+        console.error('Erro ao enviar mensagem:', error);
+        const errorMessage: ChatMessage = {
+          text: 'Sem conexão com o servidor',
+          isBot: true,
+          timestamp: this.getCurrentTime(),
+          isError: true
+        };
+        this.messages.push(errorMessage);
+        this.shouldScroll = true;
+      }
+    });
+  }
+
+  sendOptionsMessage() {
+    const optionsMessage: ChatMessage = {
+      text: 'opções',
+      isBot: false,
+      timestamp: this.getCurrentTime()
+    };
+
+    this.messages.push(optionsMessage);
+    this.shouldScroll = true;
+
+    const apiMessage: ApiMessage = {
+      content: optionsMessage.text,
+      isBot: false,
+      timestamp: ''
+    };
+
+    this.messageService.sendMessage(apiMessage).subscribe({
+      error: (error) => {
+        console.error('Erro ao enviar mensagem:', error);
+        const errorMessage: ChatMessage = {
+          text: 'Sem conexão com o servidor',
+          isBot: true,
+          timestamp: this.getCurrentTime(),
+          isError: true
+        };
+        this.messages.push(errorMessage);
+        this.shouldScroll = true;
+      }
+    });
+  }
+
+  selectOption(option: string) {
+    const optionMessage: ChatMessage = {
+      text: option,
+      isBot: false,
+      timestamp: this.getCurrentTime()
+    };
+
+    this.messages.push(optionMessage);
+    this.shouldScroll = true;
+
+    const apiMessage: ApiMessage = {
+      content: optionMessage.text,
       isBot: false,
       timestamp: ''
     };

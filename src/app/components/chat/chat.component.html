@@ -24,6 +24,16 @@
                 'bg-gray-800 rounded-tl-lg rounded-tr-lg rounded-br-lg p-3' + (message.isError ? ' message-error' : '') : 
                 'bg-blue-600 rounded-tr-lg rounded-tl-lg rounded-bl-lg p-3'">
                 <p class="text-white">{{ message.text }}</p>
+                <!-- Opções -->
+                <div *ngIf="message.isBot && message.options && message.options.length > 0" class="flex flex-col gap-2 mt-3">
+                  <button 
+                    *ngFor="let option of message.options"
+                    (click)="selectOption(option)"
+                    class="w-full px-3 py-2 bg-gray-700/30 hover:bg-gray-700/50 rounded-lg text-sm text-white transition-colors duration-200"
+                  >
+                    {{ option }}
+                  </button>
+                </div>
               </div>
               <span class="text-xs text-gray-400 mt-1 block">{{ message.timestamp | timeFormat }}</span>
             </div>
@@ -33,12 +43,20 @@
         <!-- Input -->
         <div class="p-4 border-t border-gray-700">
           <div class="flex items-center bg-gray-800 rounded-full">
+            <button 
+              (click)="sendOptionsMessage()"
+              class="p-3 text-gray-400 hover:text-white"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
             <input 
               type="text" 
               [(ngModel)]="newMessage"
               (keyup.enter)="sendMessage()"
               placeholder="Digite sua mensagem..." 
-              class="flex-1 bg-transparent p-3 rounded-l-full focus:outline-none"
+              class="flex-1 bg-transparent p-3 focus:outline-none"
             >
             <button 
               (click)="sendMessage()"
