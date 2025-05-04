@@ -23,7 +23,7 @@
               <div [class]="message.isBot ? 
                 'bg-gray-800 rounded-tl-lg rounded-tr-lg rounded-br-lg p-3' + (message.isError ? ' message-error' : '') : 
                 'bg-blue-600 rounded-tr-lg rounded-tl-lg rounded-bl-lg p-3'">
-                <p class="text-white">{{ message.text }}</p>
+                <p class="text-white" [innerHTML]="message.text | lineBreak"></p>
                 <!-- Opções -->
                 <div *ngIf="message.isBot && message.options && message.options.length > 0" class="flex flex-col gap-2 mt-3">
                   <button 

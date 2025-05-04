@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MessageService, Message as ApiMessage, MessagePair } from '../../services/message.service';
 import { TimeFormatPipe } from '../../pipes/time-format.pipe';
+import { LineBreakPipe } from '../../pipes/line-break.pipe';
 import { interval, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -18,7 +19,7 @@ interface ChatMessage {
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule, TimeFormatPipe],
+  imports: [CommonModule, FormsModule, TimeFormatPipe, LineBreakPipe],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
