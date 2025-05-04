@@ -27,13 +27,9 @@ export interface MessagePair {
 export class MessageService {
   private apiUrl = 'https://furia-day-api.vercel.app/messages';
   private headers = new HttpHeaders({
-    'Content-Type': 'application/json',
+    'Content-Type': 'text/plain',
     'Cache-Control': 'no-cache',
-    'Pragma': 'no-cache',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-    'Origin': 'https://furia-e7g73iqtt-kadufrancas-projects.vercel.app'
+    'Pragma': 'no-cache'
   });
 
   constructor(private http: HttpClient) { }
@@ -44,7 +40,7 @@ export class MessageService {
       const userData = JSON.parse(user);
       message.userId = userData.id;
     }
-    return this.http.post<Message>(this.apiUrl, message, { headers: this.headers });
+    return this.http.post<Message>(this.apiUrl, JSON.stringify(message), { headers: this.headers });
   }
 
   getMessageHistory(): Observable<MessagePair[]> {
