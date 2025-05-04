@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -26,6 +26,11 @@ export interface MessagePair {
 })
 export class MessageService {
   private apiUrl = 'https://furia-day-api.vercel.app/messages';
+  private headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache'
+  });
 
   constructor(private http: HttpClient) { }
 
@@ -35,17 +40,17 @@ export class MessageService {
       const userData = JSON.parse(user);
       message.userId = userData.id;
     }
-    return this.http.post<Message>(this.apiUrl, message);
+    return this.http.post<Message>(this.apiUrl, message, { headers: this.headers });
   }
 
   getMessageHistory(): Observable<MessagePair[]> {
     const user = localStorage.getItem('furiaUser');
     if (!user) {
-      return this.http.get<MessagePair[]>(this.apiUrl);
+      return this.http.get<MessagePair[]>(this.apiUrl, { headers: this.headers });
     }
     
     const userData = JSON.parse(user);
-    return this.http.get<MessagePair[]>(this.apiUrl).pipe(
+    return this.http.get<MessagePair[]>(this.apiUrl, { headers: this.headers }).pipe(
       map(messages => {
         return messages.filter(pair => {
           return pair.userMessage.userId === userData.id;
@@ -58,7 +63,7 @@ export class MessageService {
     const user = localStorage.getItem('furiaUser');
     if (user) {
       const userData = JSON.parse(user);
-      return this.http.get<MessagePair[]>(`${this.apiUrl}?since=${lastTimestamp}`).pipe(
+      return this.http.get<MessagePair[]>(`${this.apiUrl}?since=${lastTimestamp}`, { headers: this.headers }).pipe(
         map(messages => {
           return messages.filter(pair => {
             return pair.userMessage.userId === userData.id;
@@ -66,6 +71,6 @@ export class MessageService {
         })
       );
     }
-    return this.http.get<MessagePair[]>(`${this.apiUrl}?since=${lastTimestamp}`);
+    return this.http.get<MessagePair[]>(`${this.apiUrl}?since=${lastTimestamp}`, { headers: this.headers });
   }
 } 
