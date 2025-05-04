@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface Message {
   id?: number;
@@ -8,7 +9,10 @@ export interface Message {
   content: string;
   isBot: boolean;
   timestamp: string;
-  options?: string[];
+  options?: Array<{
+    text: string;
+    link?: string;
+  }>;
   userId?: number;
 }
 
@@ -41,14 +45,26 @@ export class MessageService {
     }
     
     const userData = JSON.parse(user);
-    return this.http.get<MessagePair[]>(`${this.apiUrl}?userId=${userData.id}`);
+    return this.http.get<MessagePair[]>(this.apiUrl).pipe(
+      map(messages => {
+        return messages.filter(pair => {
+          return pair.userMessage.userId === userData.id;
+        });
+      })
+    );
   }
 
   getNewMessages(lastTimestamp: string): Observable<MessagePair[]> {
     const user = localStorage.getItem('furiaUser');
     if (user) {
       const userData = JSON.parse(user);
-      return this.http.get<MessagePair[]>(`${this.apiUrl}?since=${lastTimestamp}&userId=${userData.id}`);
+      return this.http.get<MessagePair[]>(`${this.apiUrl}?since=${lastTimestamp}`).pipe(
+        map(messages => {
+          return messages.filter(pair => {
+            return pair.userMessage.userId === userData.id;
+          });
+        })
+      );
     }
     return this.http.get<MessagePair[]>(`${this.apiUrl}?since=${lastTimestamp}`);
   }

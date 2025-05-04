@@ -13,7 +13,10 @@ interface ChatMessage {
   timestamp: string;
   id?: number;
   isError?: boolean;
-  options?: string[];
+  options?: Array<{
+    text: string;
+    link?: string;
+  }>;
 }
 
 @Component({
@@ -120,12 +123,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   private loadMessages() {
     const user = localStorage.getItem('furiaUser');
     if (!user) {
-      this.messages = [{
-        text: 'Bem vindo furioso ao chatBot da FURIA! Vejo que você ainda não tem uma conta... crie uma no botão acima',
-        isBot: true,
-        timestamp: this.getCurrentTime()
-      }];
-      this.shouldScroll = true;
       return;
     }
 
@@ -154,13 +151,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       },
       error: (error) => {
         console.error('Erro ao carregar mensagens:', error);
-        this.messages = [{
-          text: 'Estou aqui para conversar sobre games e eSports! O que você quer saber hoje?',
-          isBot: true,
-          timestamp: this.getCurrentTime(),
-          options: ['hoje', 'jogo', 'time', 'equipe', 'jogador', 'partida']
-        }];
-        this.shouldScroll = true;
       }
     });
   }
@@ -234,9 +224,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
   }
 
-  selectOption(option: string) {
+  selectOption(option: { text: string; link?: string }) {
+    if (option.link) {
+      window.open(option.link, '_blank');
+    }
+
     const optionMessage: ChatMessage = {
-      text: option,
+      text: option.text,
       isBot: false,
       timestamp: this.getCurrentTime()
     };
@@ -297,11 +291,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       if (res.ok) {
         // Login bem sucedido
         const data = await res.json();
+        console.log(data);
         this.configSuccess = true;
         localStorage.setItem('furiaUser', JSON.stringify({
-          id: data.id,
-          username: this.configData.username,
-          selected_team: this.configData.selected_team
+          id: data.user.id,
+          username: data.user.username,
+          selected_team: data.user.selected_team
         }));
         setTimeout(() => this.closeConfigModal(), 1500);
         return null;
@@ -322,9 +317,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         const data = await res.json();
         this.configSuccess = true;
         localStorage.setItem('furiaUser', JSON.stringify({
-          id: data.id,
-          username: this.configData.username,
-          selected_team: this.configData.selected_team
+          id: data.user.id,
+          username: data.user.username,
+          selected_team: data.user.selected_team
         }));
         setTimeout(() => this.closeConfigModal(), 1500);
       }
