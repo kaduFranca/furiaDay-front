@@ -1,27 +1,80 @@
 # FuriaDay
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.19.
+O FuriaDay é uma aplicação web desenvolvida em Angular que oferece um sistema de chat interativo para fãs da FURIA Esports. O projeto foi desenvolvido para proporcionar uma experiência única de interação com os times da FURIA.
 
-## Development server
+## 🚀 Funcionalidades Principais
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### 💬 Sistema de Chat
+- Interface de chat em tempo real
+- Suporte a mensagens de texto
+- Opções de interação com links externos
+- Histórico de mensagens persistente
+- Polling automático para novas mensagens
 
-## Code scaffolding
+### 👤 Configuração de Usuário
+- Sistema de autenticação
+- Seleção de time favorito (FURIA MA, FURIA FE, FURIA Academy)
+- Personalização de perfil
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### 🔄 Recursos Técnicos
+- Desenvolvido com Angular
+- Interface responsiva
+- Estilização com Tailwind CSS
+- Integração com API REST
+- Armazenamento local de dados do usuário
 
-## Build
+## 🛠️ Tecnologias Utilizadas
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Angular 18
+- TypeScript
+- Tailwind CSS
+- RxJS
+- Angular Material (opcional)
 
-## Running unit tests
+## 📦 Instalação
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+1. Clone o repositório:
+```bash
+git clone [URL_DO_REPOSITÓRIO]
+```
 
-## Running end-to-end tests
+2. Instale as dependências:
+```bash
+npm install
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+3. Inicie o servidor de desenvolvimento:
+```bash
+ng serve
+```
 
-## Further help
+4. Acesse a aplicação em:
+```
+http://localhost:4200
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 🔧 Configuração
+
+O projeto utiliza um arquivo `proxy.conf.json` para configuração de proxy e um arquivo `vercel.json` para deploy na Vercel.
+
+## 📝 Estrutura do Projeto
+
+```
+src/
+├── app/
+│   ├── components/
+│   │   ├── chat/
+│   │   └── config/
+│   ├── services/
+│   └── pipes/
+├── assets/
+└── styles/
+```
+
+## 🤝 Contribuição
+
+Contribuições são bem-vindas! Por favor, siga as diretrizes de contribuição do projeto.
+
+## 📄 Licença
+
+Este projeto está sob a licença [INSERIR LICENÇA].
