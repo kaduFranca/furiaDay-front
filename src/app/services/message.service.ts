@@ -25,7 +25,7 @@ export interface MessagePair {
   providedIn: 'root'
 })
 export class MessageService {
-  private apiUrl = '/api/messages/';
+  private apiUrl = 'https://furia-day-api.vercel.app/messages';
 
   constructor(private http: HttpClient) { }
 

@@ -13,14 +13,14 @@ O FuriaDay é uma aplicação web desenvolvida em Angular que oferece um sistema
 
 ### 👤 Configuração de Usuário
 - Sistema de autenticação
-- Seleção de time favorito (FURIA MA, FURIA FE, FURIA Academy)
+- Seleção de time favorito (FURIA Masculino, FURIA Feminino, FURIA Academy)
 - Personalização de perfil
 
 ### 🔄 Recursos Técnicos
 - Desenvolvido com Angular
 - Interface responsiva
 - Estilização com Tailwind CSS
-- Integração com API REST
+- Integração com API REST (https://github.com/kaduFranca/furiaDay-api)
 - Armazenamento local de dados do usuário
 
 ## 🛠️ Tecnologias Utilizadas
@@ -31,27 +31,10 @@ O FuriaDay é uma aplicação web desenvolvida em Angular que oferece um sistema
 - RxJS
 - Angular Material (opcional)
 
-## 📦 Instalação
+## 🔥 Utilização
 
-1. Clone o repositório:
-```bash
-git clone [URL_DO_REPOSITÓRIO]
-```
+Link para utilização: https://furia-day.vercel.app/chat
 
-2. Instale as dependências:
-```bash
-npm install
-```
-
-3. Inicie o servidor de desenvolvimento:
-```bash
-ng serve
-```
-
-4. Acesse a aplicação em:
-```
-http://localhost:4200
-```
 
 ## 🔧 Configuração
 
