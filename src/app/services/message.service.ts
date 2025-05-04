@@ -29,7 +29,11 @@ export class MessageService {
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
     'Cache-Control': 'no-cache',
-    'Pragma': 'no-cache'
+    'Pragma': 'no-cache',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    'Origin': 'https://furia-e7g73iqtt-kadufrancas-projects.vercel.app'
   });
 
   constructor(private http: HttpClient) { }
