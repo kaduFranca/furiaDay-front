@@ -118,6 +118,17 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   private loadMessages() {
+    const user = localStorage.getItem('furiaUser');
+    if (!user) {
+      this.messages = [{
+        text: 'Bem vindo furioso ao chatBot da FURIA! Vejo que você ainda não tem uma conta... crie uma no botão acima',
+        isBot: true,
+        timestamp: this.getCurrentTime()
+      }];
+      this.shouldScroll = true;
+      return;
+    }
+
     this.messageService.getMessageHistory().subscribe({
       next: (apiMessages) => {
         if (apiMessages && apiMessages.length > 0) {
@@ -139,17 +150,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
             this.lastBotMessageId = botMessages[botMessages.length - 1].id;
           }
           this.shouldScroll = true;
-        } else {
-          // Verifica se existe usuário no localStorage
-          const user = localStorage.getItem('furiaUser');
-          if (!user) {
-            this.messages = [{
-              text: 'Bem vindo furioso ao chatBot da FURIA! Vejo que você ainda não tem uma conta... crie uma no botão acima',
-              isBot: true,
-              timestamp: this.getCurrentTime()
-            }];
-            this.shouldScroll = true;
-          }
         }
       },
       error: (error) => {

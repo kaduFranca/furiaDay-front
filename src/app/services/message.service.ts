@@ -36,11 +36,12 @@ export class MessageService {
 
   getMessageHistory(): Observable<MessagePair[]> {
     const user = localStorage.getItem('furiaUser');
-    if (user) {
-      const userData = JSON.parse(user);
-      return this.http.get<MessagePair[]>(`${this.apiUrl}?userId=${userData.id}`);
+    if (!user) {
+      return this.http.get<MessagePair[]>(this.apiUrl);
     }
-    return this.http.get<MessagePair[]>(this.apiUrl);
+    
+    const userData = JSON.parse(user);
+    return this.http.get<MessagePair[]>(`${this.apiUrl}?userId=${userData.id}`);
   }
 
   getNewMessages(lastTimestamp: string): Observable<MessagePair[]> {
