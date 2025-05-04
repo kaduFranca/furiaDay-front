@@ -30,6 +30,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   private pollingSubscription?: Subscription;
   private lastBotMessageId?: number;
   private shouldScroll = false;
+  showConfigModal = false;
+  configData = { username: '', password: '', selected_team: '' };
+  teams = ['furia ma', 'furia fe', 'furia academy'];
+  configError = '';
+  configSuccess = false;
 
   constructor(private messageService: MessageService) {}
 
@@ -135,8 +140,16 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
           }
           this.shouldScroll = true;
         } else {
-          // Se não houver mensagens, envia automaticamente a mensagem "opções"
-          this.sendOptionsMessage();
+          // Verifica se existe usuário no localStorage
+          const user = localStorage.getItem('furiaUser');
+          if (!user) {
+            this.messages = [{
+              text: 'Bem vindo furioso ao chatBot da FURIA! Vejo que você ainda não tem uma conta... crie uma no botão acima',
+              isBot: true,
+              timestamp: this.getCurrentTime()
+            }];
+            this.shouldScroll = true;
+          }
         }
       },
       error: (error) => {
@@ -148,8 +161,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
           options: ['hoje', 'jogo', 'time', 'equipe', 'jogador', 'partida']
         }];
         this.shouldScroll = true;
-        // Envia a mensagem "opções" em caso de erro também
-        this.sendOptionsMessage();
       }
     });
   }
@@ -251,6 +262,77 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.messages.push(errorMessage);
         this.shouldScroll = true;
       }
+    });
+  }
+
+  openConfigModal() {
+    this.showConfigModal = true;
+    this.configError = '';
+    this.configSuccess = false;
+  }
+
+  closeConfigModal() {
+    this.showConfigModal = false;
+  }
+
+  submitConfigForm() {
+    this.configError = '';
+    this.configSuccess = false;
+    if (!this.configData.username || !this.configData.password || !this.configData.selected_team) {
+      this.configError = 'Preencha todos os campos.';
+      return;
+    }
+
+    // Primeiro tenta fazer login
+    fetch('https://furia-day-api.vercel.app/users/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: this.configData.username,
+        password: this.configData.password,
+        selected_team: this.configData.selected_team
+      })
+    })
+    .then(async res => {
+      if (res.ok) {
+        // Login bem sucedido
+        const data = await res.json();
+        this.configSuccess = true;
+        localStorage.setItem('furiaUser', JSON.stringify({
+          id: data.id,
+          username: this.configData.username,
+          selected_team: this.configData.selected_team
+        }));
+        setTimeout(() => this.closeConfigModal(), 1500);
+        return null;
+      } else {
+        // Se o login falhar, tenta criar o usuário
+        return fetch('https://furia-day-api.vercel.app/users/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.configData)
+        });
+      }
+    })
+    .then(async res => {
+      if (res && !res.ok) {
+        throw new Error('Erro ao criar usuário');
+      }
+      if (res) {
+        const data = await res.json();
+        this.configSuccess = true;
+        localStorage.setItem('furiaUser', JSON.stringify({
+          id: data.id,
+          username: this.configData.username,
+          selected_team: this.configData.selected_team
+        }));
+        setTimeout(() => this.closeConfigModal(), 1500);
+      }
+      return null;
+    })
+    .catch(() => {
+      this.configError = 'Erro ao autenticar ou criar usuário';
+      return null;
     });
   }
 } 

@@ -9,6 +9,7 @@ export interface Message {
   isBot: boolean;
   timestamp: string;
   options?: string[];
+  userId?: number;
 }
 
 export interface MessagePair {
@@ -25,14 +26,29 @@ export class MessageService {
   constructor(private http: HttpClient) { }
 
   sendMessage(message: Message): Observable<Message> {
+    const user = localStorage.getItem('furiaUser');
+    if (user) {
+      const userData = JSON.parse(user);
+      message.userId = userData.id;
+    }
     return this.http.post<Message>(this.apiUrl, message);
   }
 
   getMessageHistory(): Observable<MessagePair[]> {
+    const user = localStorage.getItem('furiaUser');
+    if (user) {
+      const userData = JSON.parse(user);
+      return this.http.get<MessagePair[]>(`${this.apiUrl}?userId=${userData.id}`);
+    }
     return this.http.get<MessagePair[]>(this.apiUrl);
   }
 
   getNewMessages(lastTimestamp: string): Observable<MessagePair[]> {
+    const user = localStorage.getItem('furiaUser');
+    if (user) {
+      const userData = JSON.parse(user);
+      return this.http.get<MessagePair[]>(`${this.apiUrl}?since=${lastTimestamp}&userId=${userData.id}`);
+    }
     return this.http.get<MessagePair[]>(`${this.apiUrl}?since=${lastTimestamp}`);
   }
 } 

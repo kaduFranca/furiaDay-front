@@ -11,8 +11,15 @@
               <div class="text-sm text-500 opacity-50">&#64;furiagg</div>
             </div>
           </div>
-          <div class="text-green-500">
-            <span class="text-sm">⬤&nbsp;Conectado</span>
+          <div class="flex items-center gap-4">
+            <button (click)="openConfigModal()" class="p-2 hover:bg-gray-700 rounded transition">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <div class="text-green-500">
+              <span class="text-sm">⬤&nbsp;Conectado</span>
+            </div>
           </div>
         </div>
 
@@ -70,4 +77,33 @@
         </div>
     </div>
 </div>
+
+<!-- Modal de Configurações -->
+<div *ngIf="showConfigModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+  <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md relative">
+    <button (click)="closeConfigModal()" class="absolute top-3 right-3 text-gray-500 hover:text-black text-2xl">&times;</button>
+    <h2 class="text-2xl font-bold mb-6 text-center text-black">Configurações</h2>
+    <form (ngSubmit)="submitConfigForm()" autocomplete="off">
+      <div class="mb-4">
+        <label class="block text-black font-semibold mb-1">Usuário</label>
+        <input [(ngModel)]="configData.username" name="username" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-black" required />
+      </div>
+      <div class="mb-4">
+        <label class="block text-black font-semibold mb-1">Senha</label>
+        <input [(ngModel)]="configData.password" name="password" type="password" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-black" required />
+      </div>
+      <div class="mb-4">
+        <label class="block text-black font-semibold mb-1">Time</label>
+        <select [(ngModel)]="configData.selected_team" name="selected_team" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-black" required>
+          <option value="" disabled selected>Selecione um time</option>
+          <option *ngFor="let team of teams" [value]="team">{{ team }}</option>
+        </select>
+      </div>
+      <div *ngIf="configError" class="text-red-600 text-sm mb-2">{{ configError }}</div>
+      <div *ngIf="configSuccess" class="text-green-600 text-sm mb-2">Configurações salvas!</div>
+      <button type="submit" class="w-full bg-black text-white py-2 rounded font-semibold hover:bg-gray-800 transition">Salvar</button>
+    </form>
+  </div>
+</div>
+
 <p class="text-sm text-gray-400 mt-4 text-center opacity-50">© 2025 FURIA Chat. Desenvolvido com 🔥</p>

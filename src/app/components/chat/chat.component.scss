@@ -36,4 +36,106 @@
 .message-error {
   background-color: rgba(255, 0, 0, 0.1);
   border-left: 3px solid #ff0000;
+}
+
+/* Modal de Configurações - NOVO ESTILO */
+.bg-white {
+  background-color: #191919; /* cinzaescuro */
+}
+.text-black {
+  color: #fff;
+}
+.shadow-lg {
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+.p-8 {
+  padding: 2rem;
+}
+.rounded-xl {
+  border-radius: 1rem;
+}
+.relative {
+  position: relative;
+}
+.max-w-md {
+  max-width: 28rem;
+}
+
+/* Inputs do modal de configurações */
+.bg-white input,
+.bg-white select {
+  background-color: #292929;
+  color: #fff;
+  border: 1px solid #333;
+}
+.bg-white input:focus,
+.bg-white select:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+/* Input do chat deve permanecer transparente */
+.bg-gray-800 input[type="text"] {
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  box-shadow: none;
+}
+.bg-gray-800 input[type="text"]:focus {
+  outline: none;
+  border: none;
+}
+
+label {
+  color: #fff;
+}
+button[type="submit"] {
+  background-color: #2563eb; /* azul */
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  transition: background 0.2s;
+}
+button[type="submit"]:hover {
+  background-color: #1d4ed8;
+}
+button.absolute {
+  color: #fff;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+button.absolute:hover {
+  color: #2563eb;
+}
+.text-green-600 {
+  color: #22c55e;
+}
+.text-red-600 {
+  color: #ef4444;
+}
+
+.fixed {
+  position: fixed;
+}
+.inset-0 {
+  top: 0; left: 0; right: 0; bottom: 0;
+}
+.z-50 {
+  z-index: 50;
+}
+.bg-opacity-60 {
+  background-color: rgba(0,0,0,0.6);
+}
+.hover\:bg-gray-800:hover {
+  background-color: #1f2937;
+}
+
+/* Garantir fundo branco para a logo da FURIA */
+.w-10.h-10.bg-white {
+  background-color: #fff !important;
 } 

@@ -13,4 +13,4 @@ export class LineBreakPipe implements PipeTransform {
     const html = value.replace(/\n/g, '<br>');
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
-} 
+}
