@@ -123,6 +123,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   private loadMessages() {
     const user = localStorage.getItem('furiaUser');
     if (!user) {
+      this.messages = []; // Limpa as mensagens se não houver usuário
       return;
     }
 
@@ -162,6 +163,19 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   sendMessage() {
     if (!this.newMessage.trim()) return;
 
+    const user = localStorage.getItem('furiaUser');
+    if (!user) {
+      const errorMessage: ChatMessage = {
+        text: 'Sem conexão com o servidor. Por favor, faça login.',
+        isBot: true,
+        timestamp: this.getCurrentTime(),
+        isError: true
+      };
+      this.messages.push(errorMessage);
+      this.shouldScroll = true;
+      return;
+    }
+
     const userMessage: ChatMessage = {
       text: this.newMessage,
       isBot: false,
@@ -194,6 +208,19 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   sendOptionsMessage() {
+    const user = localStorage.getItem('furiaUser');
+    if (!user) {
+      const errorMessage: ChatMessage = {
+        text: 'Sem conexão com o servidor. Por favor, faça login.',
+        isBot: true,
+        timestamp: this.getCurrentTime(),
+        isError: true
+      };
+      this.messages.push(errorMessage);
+      this.shouldScroll = true;
+      return;
+    }
+
     const optionsMessage: ChatMessage = {
       text: 'opções',
       isBot: false,
@@ -225,6 +252,19 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   selectOption(option: { text: string; link?: string }) {
+    const user = localStorage.getItem('furiaUser');
+    if (!user) {
+      const errorMessage: ChatMessage = {
+        text: 'Sem conexão com o servidor. Por favor, faça login no botão acima.',
+        isBot: true,
+        timestamp: this.getCurrentTime(),
+        isError: true
+      };
+      this.messages.push(errorMessage);
+      this.shouldScroll = true;
+      return;
+    }
+
     if (option.link) {
       window.open(option.link, '_blank');
     }
