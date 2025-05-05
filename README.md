@@ -4,9 +4,9 @@ O FuriaDay é uma aplicação web desenvolvida em Angular que oferece um sistema
 
 ## 🔥 Utilização
 
-1 - Link para utilização: https://furia-day.vercel.app/chat
-2 - Crie um usuário pelo botão acima
-3 - Dê um salve para o bot para usar a IA de linguagem natural ou escreva "opções" para começar o fluxo
+- Link para utilização: https://furia-day.vercel.app/chat
+- Crie um usuário pelo botão acima
+- Dê um salve para o bot para usar a IA de linguagem natural ou escreva "opções" para começar o fluxo
 ## 🚀 Funcionalidades Principais
 
 ### 💬 Sistema de Chat
