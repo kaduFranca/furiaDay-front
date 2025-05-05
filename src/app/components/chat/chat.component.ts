@@ -42,8 +42,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   constructor(private messageService: MessageService) {}
 
   ngOnInit() {
-    this.loadMessages();
-    this.startPolling();
+    const user = localStorage.getItem('furiaUser');
+    if (!user) {
+      this.messages = []; // Limpa as mensagens se não houver usuário
+    } else {
+      this.loadMessages();
+      this.startPolling();
+    }
   }
 
   ngAfterViewChecked() {
@@ -73,7 +78,14 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     // Verifica novas mensagens a cada 2 segundos
     this.pollingSubscription = interval(2000)
       .pipe(
-        switchMap(() => this.messageService.getMessageHistory())
+        switchMap(() => {
+          const user = localStorage.getItem('furiaUser');
+          if (!user) {
+            this.messages = []; // Limpa as mensagens se não houver usuário
+            return [];
+          }
+          return this.messageService.getMessageHistory();
+        })
       )
       .subscribe({
         next: (allMessages) => {
