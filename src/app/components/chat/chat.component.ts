@@ -42,13 +42,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   constructor(private messageService: MessageService) {}
 
   ngOnInit() {
-    const user = localStorage.getItem('furiaUser');
-    if (!user) {
-      this.messages = []; // Limpa as mensagens se não houver usuário
-    } else {
-      this.loadMessages();
-      this.startPolling();
-    }
+    this.checkUserAndLoadMessages();
   }
 
   ngAfterViewChecked() {
@@ -74,6 +68,24 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.stopPolling();
   }
 
+  private checkUserAndLoadMessages() {
+    const user = localStorage.getItem('furiaUser');
+    if (!user) {
+      this.messages = [];
+      this.stopPolling();
+    } else {
+      this.loadMessages();
+      this.startPolling();
+    }
+  }
+
+  private stopPolling() {
+    if (this.pollingSubscription) {
+      this.pollingSubscription.unsubscribe();
+      this.pollingSubscription = undefined;
+    }
+  }
+
   private startPolling() {
     // Verifica novas mensagens a cada 2 segundos
     this.pollingSubscription = interval(2000)
@@ -81,7 +93,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         switchMap(() => {
           const user = localStorage.getItem('furiaUser');
           if (!user) {
-            this.messages = []; // Limpa as mensagens se não houver usuário
+            this.messages = [];
+            this.stopPolling();
             return [];
           }
           return this.messageService.getMessageHistory();
@@ -124,12 +137,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
           console.error('Erro ao verificar novas mensagens:', error);
         }
       });
-  }
-
-  private stopPolling() {
-    if (this.pollingSubscription) {
-      this.pollingSubscription.unsubscribe();
-    }
   }
 
   private loadMessages() {
@@ -350,6 +357,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
           username: data.user.username,
           selected_team: data.user.selected_team
         }));
+        this.checkUserAndLoadMessages(); // Inicia o carregamento de mensagens após login
         setTimeout(() => this.closeConfigModal(), 1500);
         return null;
       } else {
@@ -373,6 +381,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
           username: data.user.username,
           selected_team: data.user.selected_team
         }));
+        this.checkUserAndLoadMessages(); // Inicia o carregamento de mensagens após criar usuário
         setTimeout(() => this.closeConfigModal(), 1500);
       }
       return null;
