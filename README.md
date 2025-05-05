@@ -2,17 +2,11 @@
 
 O FuriaDay é uma aplicação web desenvolvida em Angular que oferece um sistema de chat interativo para fãs da FURIA Esports. O projeto foi desenvolvido para proporcionar uma experiência única de interação com os times da FURIA.
 
-## 📸 Screenshots
+## 🔥 Utilização
 
-Para adicionar screenshots do seu projeto, use a seguinte sintaxe:
-```markdown
-![Descrição da imagem](public/images/nome-da-imagem.png)
-```
-
-Exemplo:
-![Interface do Chat](public/images/chat-interface.png)
-![Configuração do Usuário](public/images/user-config.png)
-
+1 - Link para utilização: https://furia-day.vercel.app/chat
+2 - Crie um usuário pelo botão acima
+3 - Dê um salve para o bot para usar a IA de linguagem natural ou escreva "opções" para começar o fluxo
 ## 🚀 Funcionalidades Principais
 
 ### 💬 Sistema de Chat
@@ -21,6 +15,8 @@ Exemplo:
 - Opções de interação com links externos
 - Histórico de mensagens persistente
 - Polling automático para novas mensagens
+
+- Histórico de partida de cada time de CS da FURIA a partir de dados em tempo real da https://liquipedia.net/
 
 ### 👤 Configuração de Usuário
 - Sistema de autenticação
@@ -41,11 +37,6 @@ Exemplo:
 - Tailwind CSS
 - RxJS
 - Angular Material (opcional)
-
-## 🔥 Utilização
-
-Link para utilização: https://furia-day.vercel.app/chat
-
 
 ## 🔧 Configuração
 
